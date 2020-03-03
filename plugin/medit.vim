@@ -15,7 +15,7 @@ endfunction
 
 function! s:assign_mappings(register)
   " make these configurable
-  exe 'nnoremap <buffer> q :call s:yank_n_close("'. a:register. '")<Cr>'
+  exe 'nnoremap <silent><buffer> q :call <SID>yank_n_close("'. a:register. '")<Cr>'
   nnoremap <buffer> <esc> :close<Cr>
 endfunction
 
@@ -25,14 +25,10 @@ endfunction
 
 function! s:open_float()
     let buf = nvim_create_buf(v:false, v:true)
-    " 90% of the height
     let height = 2
-    " 60% of the height
     let width = float2nr(&columns * 0.5)
-    " horizontal position (centralized)
     let horizontal = float2nr((&columns - width) / 3)
-    " vertical position (one line down of the top)
-      let vertical = float2nr(virtcol('.'))
+    let vertical = float2nr(virtcol('.'))
     let opts = {
           \ 'relative': 'editor',
           \ 'row': vertical,
@@ -45,11 +41,14 @@ function! s:open_float()
 endfunction
 
 function! s:yank_n_close(register)
-  exe 'let @' . a:register . "= getline('.')"
+  let new_macro = getline('.')
+  exe 'let @' . a:register . "= l:new_macro"
   close
+  echom "Macro " . a:register . " = " . new_macro
 endfunction
 
 function! OpenMacroWindow(register)
+  " maybe try to preserve clipboard too?
   call s:open_register_win(a:register)
   execute 'normal! "'. a:register . "pgg"
 endfunction
@@ -57,7 +56,7 @@ endfunction
 
 " Is this how this works?
 "<Plug>MEdit
-nnoremap <expr> <Plug>MEdit ":call OpenMacroWindow('" . nr2char(getchar()) . "')<Cr>"
+nnoremap <silent><expr> <Plug>MEdit ":call OpenMacroWindow('" . nr2char(getchar()) . "')<Cr>"
 if !exists("g:medit_no_mappings") || ! g:medit_no_mappings
   nmap <Leader>q <Plug>MEdit
 endif
