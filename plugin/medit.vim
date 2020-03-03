@@ -20,7 +20,12 @@ function! s:assign_mappings(register)
 endfunction
 
 function! s:open_split()
-  split enew
+  split
+  noswapfile hide enew
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  setlocal nobuflisted
 endfunction
 
 function! s:open_float()
@@ -48,14 +53,13 @@ function! s:yank_n_close(register)
 endfunction
 
 function! OpenMacroWindow(register)
-  " maybe try to preserve clipboard too?
+  " TODO: try to preserve clipboard too?
+  " TODO: check to see if the register is valid
   call s:open_register_win(a:register)
   execute 'normal! "'. a:register . "pgg"
 endfunction
 
 
-" Is this how this works?
-"<Plug>MEdit
 nnoremap <silent><expr> <Plug>MEdit ":call OpenMacroWindow('" . nr2char(getchar()) . "')<Cr>"
 if !exists("g:medit_no_mappings") || ! g:medit_no_mappings
   nmap <Leader>q <Plug>MEdit
