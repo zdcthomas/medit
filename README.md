@@ -18,5 +18,5 @@ Then when you're done editing, just hit `q` and it'll save the macro to the regi
 MEdit should have default mappings out of the box, but you can set your own mappings if you want using `let g:medit_no_mappings = 1` and then `nmap {whatever you want} <Plug>MEdit`
 
 ### Coming Soon
-- [] Preview for changes to lines in the buffer you called things from 
-- [] Preserving your clipboard
+- [ ] Preview for changes to lines in the buffer you called things from 
+- [ ] Preserving your clipboard
