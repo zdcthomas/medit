@@ -3,6 +3,9 @@
 Ever work on a long macro and need to change something about it half way through? sure ya have.
 This'll let you open up a nice window (either floating or split) where you can edit your macro. Neat huh?
 
+## Demo
+[![asciicast](https://asciinema.org/a/WUDWsmIkqH1LNhR6pENLSGLYo.svg)](https://asciinema.org/a/WUDWsmIkqH1LNhR6pENLSGLYo)
+
 ## Default Usage
 open up the window with
 ```
