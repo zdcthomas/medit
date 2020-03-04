@@ -2,7 +2,7 @@ if exists("g:loaded_medit") || &cp
   finish
 endif
 
-let g:loaded_medit = '0.0.1' " version number
+let g:loaded_medit = '0.0.2' " version number
 
 function! s:open_register_win(register)
   if has('nvim')
@@ -30,37 +30,50 @@ endfunction
 
 function! s:open_float()
     let buf = nvim_create_buf(v:false, v:true)
-    let height = 2
-    let width = float2nr(&columns * 0.5)
-    let horizontal = float2nr((&columns - width) / 3)
-    let vertical = float2nr(virtcol('.'))
-    let opts = {
-          \ 'relative': 'editor',
-          \ 'row': vertical,
-          \ 'col': horizontal,
-          \ 'width': width,
-          \ 'height': height,
-          \ 'style': 'minimal'
-          \ }
+    let width = &columns / 3
+    let height = 3
+    let opts = { 'relative': 'win',
+               \ 'row': (&lines - height) / 2,
+               \ 'col': (&columns - width) / 2,
+               \ 'width': width,
+               \ 'height': height,
+               \ 'style': 'minimal'
+               \}
     call nvim_open_win(buf, v:true, opts)
 endfunction
 
 function! s:yank_n_close(register)
   let new_macro = getline('.')
-  exe 'let @' . a:register . "= l:new_macro"
+  if !s:is_in(s:read_only_regs(), a:register)
+    exe 'let @' . a:register . "= l:new_macro"
+    echom "Macro " . a:register . " = " . new_macro
+  endif
   close
-  echom "Macro " . a:register . " = " . new_macro
 endfunction
 
-function! OpenMacroWindow(register)
+function! s:is_in(list, element)
+  return (index(a:list, a:element) != -1)
+endfunction
+
+
+function! s:read_only_regs()
+  return ['%', '.', ':', '#']
+endfunction
+
+function! OpenRegisterWindow(register)
   " TODO: try to preserve clipboard too?
   " TODO: check to see if the register is valid
   call s:open_register_win(a:register)
-  execute 'normal! "'. a:register . "pgg"
+
+  " Thanks @lsaville !
+  let reg_contents = getreg(a:register)
+  if reg_contents != ""
+    execute 'normal! "'. a:register . "pgg"
+  endif
 endfunction
 
 
-nnoremap <silent><expr> <Plug>MEdit ":call OpenMacroWindow('" . nr2char(getchar()) . "')<Cr>"
+nnoremap <silent><expr> <Plug>MEdit ":call OpenRegisterWindow('" . nr2char(getchar()) . "')<Cr>"
 if !exists("g:medit_no_mappings") || ! g:medit_no_mappings
   nmap <Leader>q <Plug>MEdit
 endif
