@@ -1,0 +1,19 @@
+*medit.txt* Plugin for editing macros, or any register.
+
+Author: Zachary Thomas
+
+
+INTRODUCTION                                    *medit*
+
+This is a pluging for editing the contents of any writable vim
+register. The most common usage is probably editing macros, but 
+it's also possible to edit the clipboard before pasting.
+
+MAPPINGS                                        *medit-mappings*
+Opening the macro viewing window with *<Leader>q{reg}*
+Once in the window *q* saves the current line and closes the window
+or you can use *<Esc>* to close the window without saving.
+
+TIPS                                            *medit-tips*
+You can insert any key sequence literally using *<C-v>{key}*
+this is useful for inserting <Esc> or <C-c> in the macro
