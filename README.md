@@ -1,5 +1,31 @@
+# NOTE
+> **Note**
+> You don't need this plugin!
+> Instead, there's a very easy keymap that you can use that will do basically
+> the exact same thing!
+
+### Neovim Lua:
+
+```lua
+vim.keymap.set("n", "<Leader>eq", function()
+  -- ask user for which register they'd like to edit
+	local reg = vim.fn.getchar("Macro Register: ")
+
+	-- Obtain the content of the register
+	local reg_content = vim.fn.getreg("q")
+
+	-- Present the register content to the user to edit
+	local replaced_reg_content = vim.fn.input("> ", reg_content)
+
+	-- Take the user input and put it back into the register
+	vim.fn.setreg(reg, replaced_reg_content)
+end, { silent = true, desc = "Edit a macro" })
+```
+
+The vimscript version is almost identical because `vim.fn.xxxx` is simply a
+wrapper around the vimscript functions.
+
 # Medit (Macro Edit)
-## Medit is a plugin for editing your macros
 Ever work on a long macro and need to change something about it half way through? sure ya have.
 This'll let you open up a nice window (either floating or split) where you can edit your macro. Neat huh?
 
